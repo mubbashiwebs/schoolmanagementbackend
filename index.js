@@ -24,7 +24,7 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(cors())
-const port = 3000 || PORT
+const port = process.env.PORT || 3000;
 app.use('/api/school',schoolRouter)
 app.use('/api/user' , userRouter)
 app.use('/api/class' , classRouter)
