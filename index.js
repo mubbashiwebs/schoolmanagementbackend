@@ -21,7 +21,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(cors())
 connectDb()
-const port = 3000
+const port = 3000 
 app.use('/api/school',schoolRouter)
 app.use('/api/user' , userRouter)
 app.use('/api/class' , classRouter)
@@ -37,7 +37,9 @@ app.use("/api/campus", campusRouter);
 app.use('/api/batch',batchRouter)
 app.use('/api/subject', subjectRouter);
 app.use('/api/subject-allotments', subjectAllotmentRouter);
-
+app.get('/', (req, res) => {
+    res.send('Hello World!');
+});
 app.listen(port,()=>{
     console.log(`server is running on port ${port}`)
 })
