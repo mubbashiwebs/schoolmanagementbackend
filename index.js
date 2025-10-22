@@ -18,11 +18,12 @@ import subjectRouter from './routes/subject.js'
 import subjectAllotmentRouter from './routes/subjectAllotments.js'
 import dotenv from "dotenv";
 dotenv.config();
+connectDb()
+
 const app = express()
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(cors())
-connectDb()
 const port = 3000 || PORT
 app.use('/api/school',schoolRouter)
 app.use('/api/user' , userRouter)
