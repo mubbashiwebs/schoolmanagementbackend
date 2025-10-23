@@ -25,21 +25,21 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(cors())
 const port = process.env.PORT || 3000;
-app.use('/api/school',schoolRouter)
-app.use('/api/user' , userRouter)
-app.use('/api/class' , classRouter)
-app.use('/api/section', sectionRouter);
-app.use('/api/course', courseRouter);
-app.use("/api/student", studentRouter);
-app.use('/api/teacher' , teacherRouter )
-app.use('/api/english-courses', englishCourseRoutes);
-app.use('/api/teacherSalary', teacherSalaryRouter);
-app.use('/api/feeReceipt', feeReceiptRouter);
-app.use('/api/auth',userForReqRouter)
-app.use("/api/campus", campusRouter);
-app.use('/api/batch',batchRouter)
-app.use('/api/subject', subjectRouter);
-app.use('/api/subject-allotments', subjectAllotmentRouter);
+// app.use('/api/school',schoolRouter)
+// app.use('/api/user' , userRouter)
+// app.use('/api/class' , classRouter)
+// app.use('/api/section', sectionRouter);
+// app.use('/api/course', courseRouter);
+// app.use("/api/student", studentRouter);
+// app.use('/api/teacher' , teacherRouter )
+// app.use('/api/english-courses', englishCourseRoutes);
+// app.use('/api/teacherSalary', teacherSalaryRouter);
+// app.use('/api/feeReceipt', feeReceiptRouter);
+// app.use('/api/auth',userForReqRouter)
+// app.use("/api/campus", campusRouter);
+// app.use('/api/batch',batchRouter)
+// app.use('/api/subject', subjectRouter);
+// app.use('/api/subject-allotments', subjectAllotmentRouter);
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });
