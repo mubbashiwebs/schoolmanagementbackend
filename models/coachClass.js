@@ -15,11 +15,6 @@ const classSchema = new mongoose.Schema({
   fee:{type:Number , required:true},
 
   admissionFee:{type:Number , required:true},
-  generalRegister:{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'GeneralRegister',
-      required:true
-  },
  createdBy:{
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -27,5 +22,5 @@ const classSchema = new mongoose.Schema({
     }
 })
 
-const Class = new mongoose.model('Class',classSchema)
+const Class = new mongoose.model('CoachClass',classSchema)
 export default Class

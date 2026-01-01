@@ -1,6 +1,5 @@
-// import Student from "../models/student.js";
-// import Class from "../models/class.js";
-
+// import campus from "../models/campus.js";
+// import Class from "../models/coachClass.js";
 // export const addClass = async(req,res)=>{
 //     try {
 //         const isClassExist = await Class.findOne({
@@ -10,14 +9,14 @@
 //         });
 
 //         if (isClassExist) {
-//             return res.status(400).json({ message: "Class Already Exist" });
+//             return res.json({ message: "Class Already Exist" });
 //         }
 
 //         const classData = new Class(req.body);
 //         await classData.save();
-//         var newClass = await Class.findOne({name : classData.name, schoolId : classData.schoolId , campusId:classData.campusId , generalRegister:classData.generalRegister}).populate('schoolId', 'name').populate('campusId','name').populate('generalRegister')
+//         var newClass = await Class.findOne({name : classData.name, schoolId : classData.schoolId , campusId:classData.campusId}).populate('schoolId', 'name').populate('campusId','name')
             
-//         res.status(200).json({ data: newClass, message: 'Successfully added' });
+//         res.json({ data: newClass, message: 'Successfully added' });
 //     } catch (error) {
 //         console.error("Server error:", error);
 //         res.status(500).json({ message: error.message });
@@ -29,18 +28,18 @@
 // export const getAllClasses = async (req,res)=>{
 //     console.log(req.params.schoolId)
 //     try {
-//            var allClasses = await Class.find({schoolId:req.params.schoolId}).populate('campusId','name').populate('generalRegister')
+//            var allClasses = await Class.find({schoolId:req.params.schoolId}).populate('campusId','name')
 //            console.log(allClasses)
 //     if(allClasses.length >0){
-//      res.status(200).json({data:allClasses,message:'sucessfully Found'})
+//      res.json({data:allClasses,message:'sucessfully Found'})
 
 //     }
 //     else{
-//             res.status(404).json({data:[],message:'Data not Found'})
+//             res.json({data:[],message:'Data not Found'})
 
 //     }
 //     } catch (error) {
-//                res.status(500).json({message:"server error"})
+//                res.json({message:"server error"})
 //     }
  
 // }
@@ -88,19 +87,10 @@
 //       id,
 //       req.body,
 //       { new: true, runValidators: true }
-//     ).populate('schoolId',"name").populate('campusId','name').populate('generalRegister')
+//     ).populate('schoolId',"name").populate('campusId','name')
 
 //     if (!updatedClass) {
 //       return res.status(404).json({ message: "Class not found" });
-//     }
-
-//     var linkedStudents = await Student.find({ class: updatedClass._id });
-//     console.log(linkedStudents)
-//     for (let student of linkedStudents) {
-//       student.feeDetails['school'].originalFee = updatedClass.fee;
-      
-//       student.feeDetails['school'].payableFee = updatedClass.fee - student.feeDetails['school'].discount
-//       await student.save();
 //     }
 
 //     res.status(200).json({
@@ -117,8 +107,8 @@
 // };
 
 
-import Student from "../models/student.js";
-import Class from "../models/class.js";
+import campus from "../models/campus.js";
+import Class from "../models/coachClass.js";
 
 export const addClass = async(req,res)=>{
     try {
@@ -129,22 +119,21 @@ export const addClass = async(req,res)=>{
         });
 
         if (isClassExist) {
-            return res.status(400).json({ message: "Class Already Exist" });
+            return res.status(409).json({ message: "Class Already Exist" });
         }
 
         const classData = new Class(req.body);
         await classData.save();
+
         var newClass = await Class.findOne({
             name : classData.name,
             schoolId : classData.schoolId,
-            campusId: classData.campusId,
-            generalRegister: classData.generalRegister
+            campusId: classData.campusId
         })
         .populate('schoolId', 'name')
-        .populate('campusId','name')
-        .populate('generalRegister');
+        .populate('campusId','name');
             
-        res.status(200).json({ data: newClass, message: 'Successfully added' });
+        res.status(201).json({ data: newClass, message: 'Successfully added' });
     } catch (error) {
         console.error("Server error:", error);
         res.status(500).json({ message: error.message });
@@ -157,18 +146,18 @@ export const getAllClasses = async (req,res)=>{
     console.log(req.params.schoolId)
     try {
         var allClasses = await Class.find({schoolId:req.params.schoolId})
-        .populate('campusId','name')
-        .populate('generalRegister');
+            .populate('campusId','name');
 
         console.log(allClasses)
 
-        if(allClasses.length > 0){
-            res.status(200).json({ data: allClasses, message:'sucessfully Found' })
-        } else {
-            res.status(404).json({ data: [], message:'Data not Found' })
+        if(allClasses.length >0){
+            res.status(200).json({ data: allClasses, message: 'sucessfully Found' });
+        }
+        else{
+            res.status(404).json({ data: [], message: 'Data not Found' });
         }
     } catch (error) {
-        res.status(500).json({ message:"server error" })
+        res.status(500).json({ message:"server error" });
     }
 }
 
@@ -181,23 +170,26 @@ export const getAllClassesByCampus = async (req,res)=>{
             campusId:req.params.campusId
         });
 
-        if(allClasses.length > 0){
-            res.status(200).json({ data: allClasses, message:'sucessfully Found' })
+        if(allClasses.length >0){
+            res.status(200).json({ data: allClasses, message:'sucessfully Found' });
             console.log(allClasses)
-        } else {
-            res.status(404).json({ data: [], message:'Data not Found' })
+        }
+        else{
+            res.status(404).json({ data: [], message:'Data not Found' });
         }
     } catch (error) {
-        res.status(500).json({ message:"server error" })
+        res.status(500).json({ message:"server error" });
     }
 }
 
 export const deleteClass= async (req,res)=>{
     try {
-        const classdata = await Class.findByIdAndDelete(req.params.id)
+        const classdata = await Class.findByIdAndDelete(req.params.id);
+
         if(!classdata){
             return res.status(404).json({ message: 'School not found' });
         }
+
         res.status(200).json({ message: 'Class deleted successfully' });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error });
@@ -206,40 +198,34 @@ export const deleteClass= async (req,res)=>{
 
 export const updateClass = async (req, res) => {
   const { id } = req.params;
+//   const { name, contactNo, address } = req.body;
 
   try {
     const existingClass = await Class.findOne({
-          _id: { $ne: id },
-          name: req.body.name,
-          schoolId: req.body.schoolId,
-            campusId: req.body.campusId
+      _id: { $ne: id },
+      name: req.body.name,
+      schoolId: req.body.schoolId,
+      campusId: req.body.campusId
+    });
 
-        });
-    console.log(existingClass)
-        if (existingClass) {
-          return res.status(400).json({ message: "Class already exists." });
-        }
+
+
+    if (existingClass) {
+      return res.status(409).json({
+        message: "Class already exists."
+      });
+    }
+
     const updatedClass = await Class.findByIdAndUpdate(
       id,
       req.body,
       { new: true, runValidators: true }
     )
     .populate('schoolId',"name")
-    .populate('campusId','name')
-    .populate('generalRegister');
+    .populate('campusId','name');
 
     if (!updatedClass) {
       return res.status(404).json({ message: "Class not found" });
-    }
-
-    var linkedStudents = await Student.find({ class: updatedClass._id });
-    console.log(linkedStudents)
-
-    for (let student of linkedStudents) {
-      student.feeDetails['school'].originalFee = updatedClass.fee;
-      student.feeDetails['school'].payableFee =
-        updatedClass.fee - student.feeDetails['school'].discount;
-      await student.save();
     }
 
     res.status(200).json({
@@ -254,3 +240,4 @@ export const updateClass = async (req, res) => {
     });
   }
 };
+
