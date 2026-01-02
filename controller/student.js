@@ -5,7 +5,7 @@ import Course from "../models/computercourse.js";
 import EnglishCourse from "../models/englang.js";
 import Batch from "../models/batch.js";
 import ClassModel from "../models/class.js";
-import Section from "../models/Section.js";
+import Section from "../models/section.js";
 
 import Voucher from "../models/voucher.js";
 import Receipt from "../models/receipt.js";
@@ -534,6 +534,22 @@ export const getStudentSortedDataByCampus = async (req, res) => {
 
     res.json(result);
 
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export const getStudentsByClass = async (req, res) => {
+  console.log('class id', req.params.classId)
+  try {
+    const students = await Student.find({ class: req.params.classId })
+      .populate("class", "name")
+      .populate("section", "name")
+      .populate("campusId", "name")
+      .populate("schoolId", "name");
+      if (!students || students.length === 0)
+      return res.status(404).json({ message: "No students found" });
+    res.status(200).json(students);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

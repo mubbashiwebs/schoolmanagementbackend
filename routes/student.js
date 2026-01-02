@@ -10,7 +10,8 @@ import {
   getLeisureReport,
   bulkUploadStudents,
   getStdGr,
-  getStudentSortedDataByCampus
+  getStudentSortedDataByCampus,
+  getStudentsByClass
 } from "../controller/student.js";
 import upload from "../middleware/uploadExcel.js";
 // import { get } from "mongoose";
@@ -30,5 +31,6 @@ router.post("/bulk-upload", upload.single("file"), bulkUploadStudents);
 router.get('/getGrno/:schoolId/:campusId/:type/:class' , getStdGr)
 
 router.get("/getStdSortedByCampus/:schoolId/:campusId", getStudentSortedDataByCampus);
+router.get('/getByClass/:classId', getStudentsByClass)
 
 export default router;
